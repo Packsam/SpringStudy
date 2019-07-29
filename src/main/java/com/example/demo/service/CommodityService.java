@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.CommodityDTO;
+import com.example.demo.dto.PaginationDTO;
 import com.example.demo.mapper.CommodityMapper;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.Commodity;
@@ -21,9 +22,11 @@ public class CommodityService {
     @Autowired
     private UserMapper userMapper;
 
-    public List<CommodityDTO> list() {
-        List<Commodity> commoditys = commodityMapper.list();
+    public PaginationDTO list(Integer page, Integer size) {
+        Integer offset = size*(page-1);
+        List<Commodity> commoditys = commodityMapper.list(offset,size);
         List<CommodityDTO> commodityDTOs = new ArrayList<>();
+        PaginationDTO paginationDTO = new PaginationDTO();
         for(Commodity commodity:commoditys){
             User user=userMapper.findById(commodity.getCreator());
             CommodityDTO commodityDTO = new CommodityDTO();
@@ -31,6 +34,9 @@ public class CommodityService {
             commodityDTO.setUser(user);
             commodityDTOs.add(commodityDTO);
         }
-        return commodityDTOs;
+        paginationDTO.setCommoditys(commodityDTOs);
+        Integer totalcount = commodityMapper.count();//获得所有商品总数
+        paginationDTO.setPagination(totalcount,page,size);
+        return paginationDTO;
     }
 }

@@ -12,6 +12,9 @@ public interface CommodityMapper {
     @Insert("insert into commodity (title,description,gmt_create,gmt_modified,creator,tag) values (#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{tag})")
      void create(Commodity commodity);
 
-@Select("select * from commodity")
-    List<Commodity> list();
+@Select("select * from commodity limit #{offset},#{size}")
+    List<Commodity> list(Integer offset, Integer size);
+
+@Select("select count(1) from commodity")
+Integer count();
 }
