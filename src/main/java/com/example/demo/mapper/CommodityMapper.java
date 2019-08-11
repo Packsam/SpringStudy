@@ -11,11 +11,18 @@ import java.util.List;
 @Mapper
 public interface CommodityMapper {
     @Insert("insert into commodity (title,description,gmt_create,gmt_modified,creator,tag) values (#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{tag})")
-     void create(Commodity commodity);
+    void create(Commodity commodity);
 
-@Select("select * from commodity limit #{offset},#{size}")
-    List<Commodity> list(@Param(value = "offset") Integer offset,@Param(value = "size") Integer size);//因为传入的参数并不是对象，则需要写注解。
+    @Select("select * from commodity limit #{offset},#{size}")
+    List<Commodity> list(@Param(value = "offset") Integer offset, @Param(value = "size") Integer size);//因为传入的参数并不是对象，则需要写注解。
 
-@Select("select count(1) from commodity")
-Integer count();
+    @Select("select count(1) from commodity")
+    Integer count();
+
+    @Select("select * from commodity where creator = #{userId} limit #{offset},#{size}")
+    List<Commodity> listByUserId(@Param("userId") Integer userid, @Param(value = "offset") Integer offset, @Param(value = "size") Integer size);
+
+    @Select("select count(1) from commodity where creator = #{userId}")
+    Integer countByUserId(@Param("userId") Integer userId);
+
 }

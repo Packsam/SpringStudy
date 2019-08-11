@@ -16,11 +16,12 @@ public class PaginationDTO {
     private List<Integer> pages = new ArrayList<>();
     private Integer totalPage;
 
-    public void setPagination(Integer totalcount, Integer page, Integer size) {
-        totalPage = totalcount%size==0?totalcount/size:totalcount/size+1;
+    public void setPagination(Integer totalPage, Integer page) {
         if(page<=totalPage) {
             pages.add(page);
         }
+
+        this.totalPage = totalPage;
         for(int i = 1;i<=3;i++){
             if(page-i>0){
                 pages.add(0,page-i);
@@ -29,13 +30,7 @@ public class PaginationDTO {
                 pages.add(page+i);
             }
         }
-        if(page<1){
-            page =1;
-        }
 
-        if(page>totalPage){
-            page = totalPage;
-        }
         this.page = page;
 
         if(page == 1){
